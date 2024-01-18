@@ -1,0 +1,27 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block title %}Employee List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Employee List</h2>
+    <div class="row mt-3">
+        {% for employee in employees %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">{{ employee.name }}</h3>
+                    <p class="card-text">Email: {{ employee.email }}</p>
+                    <p class="card-text">Department: {{ employee.department }}</p>
+                    <p class="card-text">Role: {{ employee.role }}</p>
+                    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<a href="{% url 'employee_add' %}" class="btn btn-success">Add Employee</a>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!-- authentication/activate.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Activation</title>
+</head>
+<body>
+    <h2>Activate Your Account</h2>
+    <p>Hello {{ user.username }},</p>
+    <p>Thank you for registering! To activate your account, please click the link below:</p>
+    <a href="{{ protocol }}://{{ domain }}{% url 'activate_user' uidb64=uid token=token %}">Activate Account</a>
+    <p>If the button doesn't work, you can copy and paste the following URL into your browser:</p>
+    <p>{{ protocol }}://{{ domain }}{% url 'activate_user' uidb64=uid token=token %}</p>
+    <p>Thank you!</p>
+</body>
+</html>

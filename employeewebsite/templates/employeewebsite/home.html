@@ -1,0 +1,46 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block title %}Employee Management System{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>Welcome to the Employee Management System</h1>
+        <p>This system helps you manage departments, roles, and employees efficiently.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Departments</h3>
+                    <p class="card-text">Manage departments in your organization.</p>
+                    <a href="{% url 'department_list' %}" class="btn btn-primary">View Departments</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Roles</h3>
+                    <p class="card-text">Manage roles or positions within your company.</p>
+                    <a href="{% url 'role_list' %}" class="btn btn-primary">View Roles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Employees</h3>
+                    <p class="card-text">Manage employee details and records.</p>
+                    <a href="{% url 'employee_list' %}" class="btn btn-primary">View Employees</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

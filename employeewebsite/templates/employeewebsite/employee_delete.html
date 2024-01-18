@@ -1,0 +1,12 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Delete Employee</h2>
+    <p>Are you sure you want to delete "{{ employee.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    </form>
+</div>
+{% endblock %}

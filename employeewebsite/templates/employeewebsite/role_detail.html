@@ -1,0 +1,43 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Role details -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Role Details</h2>
+            <p class="card-text">Role Name: {{ role.name }}</p>
+            <p class="card-text">Description: {{ role.description }}</p>
+            <p class="card-text">Responsibilities: {{ role.responsibilities }}</p>
+            <!-- Add more role details -->
+        </div>
+    </div>
+
+    <!-- Employees with this role -->
+    <h3 class="mt-4">Employees with this Role</h3>
+    <div class="table-responsive">
+        <table class="table table-striped mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Joining Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in role.employee_set.all %}
+                <tr>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.phone }}</td>
+                    <td>{{ employee.department }}</td>
+                    <td>{{ employee.joining_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

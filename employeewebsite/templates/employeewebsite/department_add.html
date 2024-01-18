@@ -1,0 +1,14 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block title %}Add Department{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Department</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Department</button>
+    </form>
+</div>
+{% endblock %}

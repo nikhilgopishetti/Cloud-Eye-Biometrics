@@ -1,0 +1,28 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Employee details -->
+    <h2>Employee Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <!-- Display employee details dynamically -->
+            <p class="card-text">Name: {{ employee.name }}</p>
+            <p class="card-text">Email: {{ employee.email }}</p>
+            <p class="card-text">Phone: {{ employee.phone }}</p>
+            <p class="card-text">Joining Date: {{ employee.joining_date }}</p>
+            <!-- Add more employee details -->
+        </div>
+    </div>
+
+    <!-- Department and Role -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title">Department and Role</h3>
+            <p class="card-text">Department: {{ employee.department.name }}</p>
+            <p class="card-text">Role: {{ employee.role.name }}</p>
+            <!-- Add more details if needed -->
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Department details -->
+    <h2>Department Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <!-- Display department details dynamically -->
+            <p class="card-text">Department Name: {{ department.name }}</p>
+            <p class="card-text">Description: {{ department.description }}</p>
+            <!-- Add more department details -->
+        </div>
+    </div>
+
+    <!-- Employees in this department -->
+    <h3 class="mt-4">Employees in this Department</h3>
+    <div class="table-responsive">
+        <table class="table table-striped mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Joining Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in department.employee_set.all %}
+                <tr>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.phone }}</td>
+                    <td>{{ employee.joining_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

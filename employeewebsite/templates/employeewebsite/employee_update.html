@@ -1,0 +1,12 @@
+{% extends 'employeewebsite/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Employee</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}
