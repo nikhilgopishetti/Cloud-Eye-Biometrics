@@ -4,6 +4,17 @@ from validate_email import validate_email
 from django.contrib.auth.models import User
 from .utils import generate_token, send_activation_email, activate_user
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import ImageModel
+from .forms import ImageForm
+from .photoscript import authenticateimage
+import boto3
+import os
+from PIL import Image
+import io
+import time
 
 def create_staff_user(request):
     if request.method == "POST":
@@ -37,6 +48,7 @@ def create_superuser(request):
         return redirect('home')  # Redirect to the home page or admin panel
 
     return render(request, 'main/createsuperuser.html')
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -100,3 +112,86 @@ def home(request):
 def employee_home_view(request):
     return render(request, 'employeewebsite/home.html')
 
+
+def display_photo(request):
+
+    return render(request, 'main/photo.html')
+
+@csrf_exempt  # Add this decorator to exempt CSRF token requirement for simplicity in this example (consider using it properly in production)
+def process_image(request):
+    if request.method == 'POST':
+        try:
+            form = ImageForm(request.POST, request.FILES)
+            if form.is_valid():
+                # Access the uploaded image directly
+                uploaded_image = request.FILES['image']
+                
+                # Process the image file as needed
+                # Example: You can pass the image to another script for processing
+
+
+                image_folder = 'testimages'  # Specify the path to your folder
+                image_path = os.path.join(image_folder, uploaded_image.name)
+
+                with open(image_path, 'wb') as f:
+                    for chunk in uploaded_image.chunks():
+                        f.write(chunk)
+                                
+
+                print(image_path)
+                rekognition = boto3.client('rekognition', region_name='us-east-1')
+                dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+
+            
+
+                image = Image.open(image_path)
+                stream = io.BytesIO()
+                image.save(stream,format="PNG")
+                image_binary = stream.getvalue()
+
+
+                response = rekognition.search_faces_by_image(
+                        CollectionId='employees-images',
+                        Image={'Bytes':image_binary}                                       
+                        )
+
+                found = False
+                for match in response['FaceMatches']:
+                    print (match['Face']['FaceId'],match['Face']['Confidence'])
+                        
+                    face = dynamodb.get_item(
+                        TableName='employees',  
+                        Key={'rekognitionid': {'S': match['Face']['FaceId']}}
+                        )
+                    
+                    if 'Item' in face:
+                        print ("Found Person: ",face['Item']['firstName']['S'])
+                        found = True
+                        user, created = User.objects.get_or_create(username=match['Face']['FaceId'])
+                        if created:
+                            user.set_unusable_password()
+                            user.save()
+                        login(request, user)  # Log in the user
+                        
+                        
+
+                if not found:
+                    print("Person cannot be recognized")
+
+                
+            response_data = {'status': 'success', 'message': 'Image processed successfully'}
+
+            return JsonResponse(response_data)
+        except Exception as e:
+            # Handle any exceptions that may occur during image processing
+            response_data = {'status': 'error', 'message': str(e)}
+            return JsonResponse(response_data, status=500)
+    print(response_data)
+    # If the request method is not POST, return an error response
+    response_data = {'status': 'error', 'message': 'Invalid request method'}
+    return render(request, 'main/photo.html')
+
+def display_images(request):
+    # Get all images from the ImageModel
+    images = ImageModel.objects.all()
+    return render(request, 'main/display_images.html', {'images': images})
