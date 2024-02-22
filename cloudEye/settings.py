@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'employeewebsite.apps.EmployeewebsiteConfig',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+    'base.apps.BaseConfig',
+
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

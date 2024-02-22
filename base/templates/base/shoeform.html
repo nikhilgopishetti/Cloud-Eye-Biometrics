@@ -1,0 +1,63 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container text-center">
+    <form method="POST" action="">
+        {% csrf_token %}
+        
+        <div class="mb-3 mt-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">image url of shoe</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">url is required</h6>
+                    {{ form.image_url|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">name of shoe</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">name is required</h6>
+                    {{ form.name|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">price of shoe</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">price is required</h6>
+                    {{ form.price|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">description of shoe</h5>
+                    {{ form.description|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">phone number</h5>
+                    {{ form.phone_number|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+
+        <input type="Submit" value="Submit" class="btn btn-primary mt-3" />
+    </form>
+</div>
+
+
+{% endblock content %}

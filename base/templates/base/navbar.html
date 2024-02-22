@@ -1,0 +1,8 @@
+<a href="/">
+    <h1>All your shoes here</h1>
+</a>
+<a href="{% url 'create-shoe' %}"><h4>add a new shoe</h4></a>
+<form method="GET" action="{% url 'home' %}">
+    <input type="text" name="q" placeholder="Search Shoes...">
+</form>
+<hr>

@@ -1,0 +1,104 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <form method="GET" action="{% url 'user_activity_log' %}">
+                <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">All Users</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for user in all_users %}
+                        <li class="list-group-item"><a href="#" onclick="showUserDetails('{{ user.id }}')">{{ user.username }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">User Activity Log</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group" id="userActivityLog">
+                        <!-- User activity log will be displayed here -->
+                        {% for log in user_activity_logs %}
+                        <p>{{ log.timestamp }} - {{ log.user }}:   {{ log.activity_type }}  {{log.details}}</p>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Administrator Services</h5>
+                </div>
+                <div class="card-body">
+                    <blockquote style="margin-bottom: 0;">Create Administrator</blockquote>
+                    <a href="{% url 'create_superuser' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Admin</a>
+                    
+                    <blockquote style="margin-bottom: 0;">Create Staff User</blockquote>
+                    <a href="{% url 'create_staffuser' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Staff</a>
+                    
+                    <blockquote style="margin-bottom: 0;">Create User</blockquote>
+                    <a href="{% url 'register' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">User</a>
+                    
+                    <blockquote style="margin-bottom: 0;">Create User with Image</blockquote>
+                    <a href="{% url 'upload_image' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Upload</a>
+                    
+                    <blockquote style="margin-bottom: 0;">Go to Home</blockquote>
+                    <a href="{% url 'main-home' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Home</a>
+                    
+                    <blockquote style="margin-bottom: 0;">Log Out</blockquote>
+                    <a href="{% url 'logout' %}" class="btn btn-danger btn-block nav-link mx-2 my-2">Logout</a>
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showUserDetails(userId) {
+        // Perform AJAX request to fetch user activity log
+        // Replace the following lines with your AJAX implementation
+        fetch(`/user_activity_log?user_id=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const userActivityLog = document.getElementById('userActivityLog');
+                userActivityLog.innerHTML = ''; // Clear previous log
+                data.forEach(log => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = `${log.timestamp} - ${log.activity_type}`;
+                    userActivityLog.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching user activity log:', error));
+    }
+</script>
+{% endblock %}
