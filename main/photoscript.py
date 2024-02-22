@@ -34,3 +34,28 @@ def authenticateimage(uploaded_image):
 
     if not found:
         print("Person cannot be recognized")
+
+
+def upload_image_to_s3(file_path, bucket_name, object_name):
+    """
+    Uploads an image file to an S3 bucket.
+    
+    Args:
+        file_path (str): The local file path of the image to upload.
+        bucket_name (str): The name of the S3 bucket.
+        object_name (str): The name to give the object in the S3 bucket.
+        
+    Returns:
+        bool: True if the upload was successful, False otherwise.
+    """
+    # Initialize the S3 client
+    s3_client = boto3.client('s3')
+    
+    try:
+        # Upload the file
+        s3_client.upload_file(file_path, bucket_name, object_name)
+        print("Upload successful!")
+        return True
+    except Exception as e:
+        print(f"Upload failed: {e}")
+        return False

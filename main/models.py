@@ -1,5 +1,14 @@
 from django.db import models
 import os
+from django.contrib.auth.models import User
+
+
+class AbnormalBehavior(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    keyboard_abnormality = models.IntegerField(default=0)
+    mouse_abnormality = models.IntegerField(default=0)
+
 
 def upload_path(instance, filename):
     # Get the filename and extension
@@ -25,3 +34,10 @@ class ImageModel(models.Model):
                     self.image.file = buffer
                     self.image.name = self.image.name.replace('.jpg', '.png')
         super(ImageModel, self).save(*args, **kwargs)
+
+
+class UserActivityLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity_type = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.TextField(blank=True, null=True)

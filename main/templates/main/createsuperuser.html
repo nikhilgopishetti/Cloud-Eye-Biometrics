@@ -16,7 +16,7 @@
                 </div>
             {% endif %}
 
-            <form method="post" action="{% url 'register' %}" class="mt-4">
+            <form method="post" action="{% url 'create_superuser' %}" class="mt-4">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

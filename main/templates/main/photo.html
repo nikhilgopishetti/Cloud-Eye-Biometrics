@@ -1,80 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capture Image</title>
-</head>
-<body>
-    <h2>Capture Image</h2>
-    <form id="imageForm" method="post" enctype="multipart/form-data">
-    
-        <video id="video" width="640" height="480" autoplay></video>
-        <button type="button" id="capture">Capture</button>
-        <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
-        <input type="file" name="image" id="imageInput" style="display: none;">
-        <img id="captured-image" style="display: none;">
-    </form>
+{% extends 'main/base.html' %}
 
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureButton = document.getElementById('capture');
-        const capturedImage = document.getElementById('captured-image');
-        const imageInput = document.getElementById('imageInput');
-        const imageForm = document.getElementById('imageForm');
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Capture Image</h2>
+            <form id="imageForm" method="post" enctype="multipart/form-data">
+                {%csrf_token%}
+                <div class="text-center mb-3">
+                    <video id="video" width="640" height="480" autoplay></video>
+                </div>
+                <div class="text-center mb-3">
+                    <button type="button" id="capture" class="btn btn-primary">Capture</button>
+                    {% if user.is_authenticated %}
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(error => {
-                console.error('Error accessing camera:', error.message);
-            });
+                        <a class="nav-link btn btn-primary" href="{% url 'main-home' %}">proceed</a>
+                    {% endif %}
+                    
+                </div>
+                <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+                <input type="file" name="image" id="imageInput" style="display: none;">
+                <div class="text-center mb-3">
+                    <img id="captured-image"  style="display: none; max-width: 100%;" class="img-fluid">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-        captureButton.addEventListener('click', () => {
-            if (video.srcObject) {
-                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageDataUrl = canvas.toDataURL('image/png');
-                capturedImage.src = imageDataUrl;
-                capturedImage.style.display = 'block';
-                canvas.style.display = 'none';
+{% endblock %}
 
-                // Convert data URL to Blob
-                const blob = dataURItoBlob(imageDataUrl);
+{% block script %}
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    const capturedImage = document.getElementById('captured-image');
+    const imageInput = document.getElementById('imageInput');
+    const imageForm = document.getElementById('imageForm');
 
-                // Create a FormData object and append the Blob
-                const formData = new FormData();
-                formData.append('image', blob, 'captured_image.png');
-
-                // Submit the form with the image file
-                fetch('{%url "process_image"%}', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    // Handle the response as needed
-                })
-                .catch(error => {
-                    console.error('Error processing image:', error);
-                });
-            } else {
-                console.error('Video stream not available.');
-            }
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(error => {
+            console.error('Error accessing camera:', error.message);
         });
 
-        // Function to convert data URL to Blob
-        function dataURItoBlob(dataURI) {
-            const byteString = atob(dataURI.split(',')[1]);
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-            return new Blob([ab], { type: 'image/png' });
+    captureButton.addEventListener('click', () => {
+        if (video.srcObject) {
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageDataUrl = canvas.toDataURL('image/png');
+            capturedImage.src = imageDataUrl;
+            capturedImage.style.display = 'block';
+            canvas.style.display = 'none';
+
+            // Convert data URL to Blob
+            const blob = dataURItoBlob(imageDataUrl);
+
+            // Create a FormData object and append the Blob
+            const formData = new FormData();
+            formData.append('image', blob, 'captured_image.png');
+
+            // Submit the form with the image file
+            fetch('{%url "process_image"%}', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Handle the response as needed
+            })
+            .catch(error => {
+                console.error('Error processing image:', error);
+            });
+        } else {
+            console.error('Video stream not available.');
         }
-    </script>
-</body>
-</html>
+    });
+
+    // Function to convert data URL to Blob
+    function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: 'image/png' });
+    }
+    // Reload the current page after 3 seconds
+    setTimeout(function() {
+        location.reload();
+    }, 7000); // 3000 milliseconds = 3 seconds
+
+</script>
+{% endblock %}
+

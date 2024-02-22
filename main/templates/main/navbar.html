@@ -21,8 +21,7 @@
             <!-- Right-aligned links or buttons -->
             <ul class="navbar-nav">
                 {% if user.is_superuser %}
-    <a href="{% url 'create_superuser' %}" class="btn btn-primary mx-2">Create Administrator</a>
-    <a href="{% url 'create_staffuser' %}" class="btn btn-secondary mx-2">Create Staff Member</a>
+    <a href="{% url 'user_activity_log' %}" class="btn btn-secondary mx-2">Administrator Dashboard</a>
     <a class="nav-link btn btn-danger" href="{% url 'logout' %}">Logout</a>
     <!-- Add other buttons for superuser -->
 {% else %}
