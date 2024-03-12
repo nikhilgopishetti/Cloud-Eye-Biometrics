@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 
 
+
 urlpatterns = [             
     path('register', views.register, name="register"),
     path('create_super_user', views.create_superuser, name="create_superuser"),
@@ -9,10 +10,14 @@ urlpatterns = [
     path('', views.home, name="main-home"),
     path('process_image/', views.process_image, name='process_image'),
     path('login/', views.login_user, name="login"),
+    path('register_phrase/', views.register_passphrase, name="register_phrase"),
+    path('login_phrase/', views.authenticate_phrase, name="phrase"),
     path('logout/', views.logout_view, name="logout"),
     path('activate/<str:uidb64>/<str:token>/', views.activate_user, name='activate_user'),
     path('upload/', views.upload_image, name='upload_image'),
     path('adminDashboard/', views.user_activity_log, name='user_activity_log'),
     path('employeewebsite/home/', views.employee_home_view, name='employee-home'),
+    path('shoeapp/home/', views.shoeapp, name='shoeapp'),
 
 ]
+

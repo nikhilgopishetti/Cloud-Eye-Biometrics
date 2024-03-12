@@ -1,5 +1,4 @@
-{% extends 'main/base.html' %}
-
+{% extends 'main/base2.html' %}
 
 {% block content %}
 
@@ -7,98 +6,112 @@
     <div class="row">
         <div class="col-md-12">
             <form method="GET" action="{% url 'user_activity_log' %}">
-                <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
-                <button type="submit">Search</button>
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">All Users</h5>
+        <div class="col-md-3">
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title text-white">All Users</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="height: 50vh; overflow-y: auto;">
                     <ul class="list-group">
                         {% for user in all_users %}
-                        <li class="list-group-item"><a href="#" onclick="showUserDetails('{{ user.id }}')">{{ user.username }}</a></li>
+                            <div class="row">
+                                <p>{{ user.username }}</p>
+                                <p>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                                        <button type="submit" class="btn btn-primary btn-sm">Details</button>
+                                    </form>
+                                </p>
+                            </div>
+   
                         {% endfor %}
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">User Activity Log</h5>
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title text-white" >User Details</h5>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group" id="userActivityLog">
-                        <!-- User activity log will be displayed here -->
-                        {% for log in user_activity_logs %}
-                        <p>{{ log.timestamp }} - {{ log.user }}:   {{ log.activity_type }}  {{log.details}}</p>
-                        {% endfor %}
-
+                <div class="card-body" style="height: 45vh; overflow-y: auto;">
+                    <ul class="list-group">
+                        {% if user_details %}
+                            <li class="list-group-item">Username: {{ user_details.username }}</li>
+                            <li class="list-group-item">Email: {{ user_details.email }}</li>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete_user" value="{{ user.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        {% endif %}
                     </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Administrator Services</h5>
-                </div>
-                <div class="card-body">
-                    <blockquote style="margin-bottom: 0;">Create Administrator</blockquote>
-                    <a href="{% url 'create_superuser' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Admin</a>
-                    
-                    <blockquote style="margin-bottom: 0;">Create Staff User</blockquote>
-                    <a href="{% url 'create_staffuser' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Staff</a>
-                    
-                    <blockquote style="margin-bottom: 0;">Create User</blockquote>
-                    <a href="{% url 'register' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">User</a>
-                    
-                    <blockquote style="margin-bottom: 0;">Create User with Image</blockquote>
-                    <a href="{% url 'upload_image' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Upload</a>
-                    
-                    <blockquote style="margin-bottom: 0;">Go to Home</blockquote>
-                    <a href="{% url 'main-home' %}" class="btn btn-secondary btn-block nav-link mx-2 my-2" style="background-color: green;">Home</a>
-                    
-                    <blockquote style="margin-bottom: 0;">Log Out</blockquote>
-                    <a href="{% url 'logout' %}" class="btn btn-danger btn-block nav-link mx-2 my-2">Logout</a>
-                    
-                    
-                    
                 </div>
             </div>
         </div>
         
+        <div class="col-md-6">
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title text-white">User Activity Log</h5>
+                </div>
+                <div class="card-body" style="height: 100%; overflow-y: auto;">
+                    <ul class="list-group" id="userActivityLog">
+                        <!-- User activity log will be displayed here -->
+                        {% for log in user_activity_logs %}
+                            <li class="list-group-item">{{ log.timestamp }} - {{ log.user }}: {{ log.activity_type }} {{ log.details }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title text-white">Administrator Services</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <blockquote>Create Administrator</blockquote>
+                            <a href="{% url 'create_superuser' %}" class="btn btn-success btn-block">Admin</a>
+                        </li>
+                        <li class="list-group-item">
+                            <blockquote>Create Staff User</blockquote>
+                            <a href="{% url 'create_staffuser' %}" class="btn btn-success btn-block">Staff</a>
+                        </li>
+                        <li class="list-group-item">
+                            <blockquote>Create User</blockquote>
+                            <a href="{% url 'register' %}" class="btn btn-success btn-block">User</a>
+                        </li>
+                        <li class="list-group-item">
+                            <blockquote>Create User with Image</blockquote>
+                            <a href="{% url 'upload_image' %}" class="btn btn-success btn-block">Upload</a>
+                        </li>
+                        <li class="list-group-item">
+                            <blockquote>Go to Home</blockquote>
+                            <a href="{% url 'main-home' %}" class="btn btn-success btn-block">Home</a>
+                        </li>
+                        <li class="list-group-item">
+                            <blockquote>Log Out</blockquote>
+                            <a href="{% url 'logout' %}" class="btn btn-danger btn-block">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-{% endblock %}
-
-{% block scripts %}
-<script>
-    function showUserDetails(userId) {
-        // Perform AJAX request to fetch user activity log
-        // Replace the following lines with your AJAX implementation
-        fetch(`/user_activity_log?user_id=${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                const userActivityLog = document.getElementById('userActivityLog');
-                userActivityLog.innerHTML = ''; // Clear previous log
-                data.forEach(log => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item';
-                    li.textContent = `${log.timestamp} - ${log.activity_type}`;
-                    userActivityLog.appendChild(li);
-                });
-            })
-            .catch(error => console.error('Error fetching user activity log:', error));
-    }
-</script>
 {% endblock %}

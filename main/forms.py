@@ -9,3 +9,10 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = ImageModel
         fields = ['image']
+
+from .models import UserPassphrase
+
+class PassphraseForm(forms.ModelForm):
+    class Meta:
+        model = UserPassphrase
+        fields = ['expected_passphrase']

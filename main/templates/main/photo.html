@@ -12,10 +12,10 @@
                 </div>
                 <div class="text-center mb-3">
                     <button type="button" id="capture" class="btn btn-primary">Capture</button>
-                    {% if user.is_authenticated %}
+
 
                         <a class="nav-link btn btn-primary" href="{% url 'main-home' %}">proceed</a>
-                    {% endif %}
+
                     
                 </div>
                 <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
@@ -90,10 +90,6 @@
         }
         return new Blob([ab], { type: 'image/png' });
     }
-    // Reload the current page after 3 seconds
-    setTimeout(function() {
-        location.reload();
-    }, 7000); // 3000 milliseconds = 3 seconds
 
 </script>
 {% endblock %}

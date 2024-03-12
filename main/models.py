@@ -35,6 +35,12 @@ class ImageModel(models.Model):
                     self.image.name = self.image.name.replace('.jpg', '.png')
         super(ImageModel, self).save(*args, **kwargs)
 
+class UserPassphrase(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    expected_passphrase = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.user.username
 
 class UserActivityLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

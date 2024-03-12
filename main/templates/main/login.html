@@ -5,8 +5,10 @@
     <div class="row justify-content-center mt-5">
         <div class="col-lg-6">
             <div class="card">
+
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">Login to CloudEye</h2>
+
                     <form method="post">
                         {% csrf_token %}
                         <!-- Username -->
@@ -24,6 +26,7 @@
                     </form>
                     <div class="text-center mt-3">
                         <p>Login with image? <a href="{% url 'process_image' %}">Click here</a></p>
+                        <p>Login with voice? <a href="{% url 'phrase' %}">Click here</a></p>
                         <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
                     </div>
                 </div>

@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+
+<head>
+    <title>Register Passphrase</title>
+</head>
+  
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mt-5">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="text-center">Register Passphrase</h1>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <label for="passphrase">Passphrase:</label>
+                        <input type="text" id="passphrase" name="passphrase" required>
+
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

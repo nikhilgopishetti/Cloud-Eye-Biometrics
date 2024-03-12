@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+<head>
+    <title>Voice Authentication</title>
+</head>
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mt-5">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="text-center">Voice Authentication</h1>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-info" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form id="authForm" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+                        <button type="submit" id="recordButton" class="btn btn-primary btn-block">Record Voice</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
